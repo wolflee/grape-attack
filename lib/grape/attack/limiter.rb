@@ -50,7 +50,11 @@ module Grape
       end
 
       def max_requests_allowed
-        request.throttle_options.max.to_i
+        if request.throttle_options.max.is_a? Proc
+          request.throttle_options.max.call.to_i
+        else
+          request.throttle_options.max.to_i
+        end
       end
 
     end

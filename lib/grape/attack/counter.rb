@@ -32,7 +32,11 @@ module Grape
       end
 
       def ttl_in_seconds
-        request.throttle_options.per.to_i
+        if request.throttle_options.per.is_a? Proc
+          request.throttle_options.per.call.to_i
+        else
+          request.throttle_options.per.to_i
+        end
       end
 
     end
